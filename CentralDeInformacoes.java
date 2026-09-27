@@ -17,7 +17,7 @@ public class CentralDeInformacoes{
             obj.getEmail())!= null)
             || 
             (recuperarJogadorPorCPF(
-            obj.getCPF()) != null)
+            obj.getCpf()) != null)
 
             )return false;
 
@@ -33,7 +33,7 @@ public class CentralDeInformacoes{
 
         for(int contador = 0; contador < tamanhoLista; contador++){
             Jogador jogador = todosJogadores.get(contador);
-            if (jogador.getCPF().equals(cpf))
+            if (jogador.getCpf().equals(cpf))
                 return jogador;
         }
         return null;
