@@ -1,0 +1,18 @@
+projeto cleytin
+
+comandos git:
+
+git status
+# visualizar estagios de salvamento
+
+git add . 
+# Avançar estagios de salvamento
+
+git commit
+# Salvando alteração
+
+
+
+Estagio
+
+Sem salvamento - Pré salvo - Salvando localmente - Salvando na nuvem
