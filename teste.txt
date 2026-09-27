@@ -5,11 +5,20 @@ comandos git:
 git status
 # visualizar estagios de salvamento
 
+git log
+# verificações de alterações
+
 git add . 
 # Avançar estagios de salvamento
 
-git commit
+git commit -m "mensagem"
 # Salvando alteração
+
+git push
+# Mandar alterações salvas para o github
+
+git pull
+# pegar alterações da nuvem e colocar no computador
 
 
 
