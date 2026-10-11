@@ -11,6 +11,7 @@ public class Programa {
          System.out.println("1- novo jogador"+
                             "2- listar todos os jogadores"+
                             "3- exibir informações de um jogador específico"+
+                            "6- Geração do relatório em PDF"+
                             "S- sair"
          );
         
@@ -48,6 +49,13 @@ public class Programa {
                 }else{
                     System.out.println("Jogador não encontrado!");
                 }
+                
+                
+            case "6":
+                System.out.println("Gerando relatório...");
+                GeradorDeRelatorios.gerarRelatorio(central);
+                
+                
                 case "S":
                     persistencia.salvarCentral(central);
                     System.out.println("Saindo do programa...");
