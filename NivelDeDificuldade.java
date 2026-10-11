@@ -1,5 +1,5 @@
 public enum NivelDeDificuldade {
     FACIL , 
     MEDIO ,
-    DIFICL
+    DIFICIL
 }
