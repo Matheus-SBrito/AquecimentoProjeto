@@ -1,18 +1,21 @@
+import java.util.Scanner;
+
 public class Programa {
     public static void main(String[] args) {
         CentralDeInformacoes central = new CentralDeInformacoes();
         Persistencia persistencia = new Persistencia();
         central = persistencia.recuperarCentral();
         Scanner scanner = new Scanner(System.in);
-
+        int cont=0;
        do{
          System.out.println("1- novo jogador"+
                             "2- listar todos os jogadores"+
                             "3- exibir informações de um jogador específico"+
                             "S- sair"
          );
-
-         switch (Scanner.nextLine().toUpperCase()){
+        
+         String opcao = scanner.nextLine().toUpperCase();
+         switch (opcao){
             case "1":
                 System.out.println("Digite o nome do jogador: ");
                 String nome = scanner.nextLine();
@@ -30,13 +33,13 @@ public class Programa {
                 }
             case "2":
                 System.out.println("Lista de jogadores:");
-                for(Jogador j : central.getJogadores()){
+                for(Jogador j : central.getTodosOsJogadores()){
                     System.out.println(j);
                 }
             case "3":
-                Sytem.out.println("Digite o nome do jogador que deseja exibir as informações: ");
-                String nomeJogador = scanner.nextLine();
-                Jogador jogadorEncontrado = central.buscarJogador(nomeJogador);
+                System.out.println("Digite o CPF do jogador que deseja exibir as informações: ");
+                String dadosJogador = scanner.nextLine();
+                Jogador jogadorEncontrado = central.recuperarJogadorPorCPF(dadosJogador);
                 if(jogadorEncontrado != null){
                     System.out.println("Nome: " + jogadorEncontrado.getNome());
                     System.out.println("Sexo: " + jogadorEncontrado.getSexo());
@@ -48,12 +51,13 @@ public class Programa {
                 case "S":
                     persistencia.salvarCentral(central);
                     System.out.println("Saindo do programa...");
+                    cont++;
                     break;
                 default:
                     System.out.println("Opção inválida, tente novamente!");
 
             }
-       }while(opcao.equals("S"));
-
+       }while(cont>0);
+       scanner.close();
     }
 }

@@ -1,9 +1,12 @@
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.PrintWriter;
+
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-import java.io.File;
 
 public class Persistencia {
-    private XSStream xstream = new XSStream(new DomDriver());
+    private XStream xstream = new XStream(new DomDriver());
     private File arquivo = new File("central.xml");
 
     public void salvarCentral(CentralDeInformacoes central){
