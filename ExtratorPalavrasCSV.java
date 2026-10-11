@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class ExtratorPalavrasCSV {
     public static ArrayList<Palavra> extrairPalavras(String nomeArquivo) {
-        ArrayList<Palavra> palavras = new ArrayList();
+        ArrayList<Palavra> palavras = new ArrayList<>();
 
         try (BufferedReader br = Files.newBufferedReader(Paths.get(nomeArquivo))) {
             String linhas;
