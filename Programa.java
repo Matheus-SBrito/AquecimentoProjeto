@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Programa {
@@ -11,6 +12,8 @@ public class Programa {
          System.out.println("1- novo jogador"+
                             "2- listar todos os jogadores"+
                             "3- exibir informações de um jogador específico"+
+                            "4- salvar palavras a partir de um arquivo CSV"+
+                            "5- listar todas as palavras salvas na central"+
                             "S- sair"
          );
         
@@ -31,11 +34,13 @@ public class Programa {
                 }else{
                     System.out.println("Algo deu errado, tente novamente!");
                 }
+                break;
             case "2":
                 System.out.println("Lista de jogadores:");
                 for(Jogador j : central.getTodosOsJogadores()){
                     System.out.println(j);
                 }
+                break;
             case "3":
                 System.out.println("Digite o CPF do jogador que deseja exibir as informações: ");
                 String dadosJogador = scanner.nextLine();
@@ -48,6 +53,35 @@ public class Programa {
                 }else{
                     System.out.println("Jogador não encontrado!");
                 }
+                break;
+                case "4":
+                    System.out.println("Digite o nome do arquivo CSV: ");
+                    String nomeArquivo = scanner.nextLine();
+                    ArrayList<Palavra> listaExtraida = ExtratorPalavrasCSV.extrairPalavras(nomeArquivo);
+                    if (listaExtraida != null) {
+                        int cadastradasComSucesso = 0;
+                        for (Palavra p : listaExtraida) {
+
+                            if (central.cadastrarPalavra(p)) {
+                                cadastradasComSucesso++;
+                            }
+                        }
+                        System.out.println("Operação concluída! " + cadastradasComSucesso + " palavra(s) salva(s) na central.");
+                    } else {
+                        
+                        System.out.println("Erro: A operação de extração não foi bem sucedida (formato do CSV inválido ou erro de leitura).");
+                    }
+                    break;
+                    case "5": 
+                    System.out.println("Lista de palavras salvas na central:");
+                    if (central.getTodasAsPalavras() != null && !central.getTodasAsPalavras().isEmpty()) {
+                        for (Palavra p : central.getTodasAsPalavras()) {
+                            System.out.println(p);
+                        }
+                    } else {
+                        System.out.println("Nenhuma palavra cadastrada na central.");
+                    }
+                    break;
                 case "S":
                     persistencia.salvarCentral(central);
                     System.out.println("Saindo do programa...");
@@ -57,7 +91,7 @@ public class Programa {
                     System.out.println("Opção inválida, tente novamente!");
 
             }
-       }while(cont>0);
+       }while(cont == 0);
        scanner.close();
     }
 }
