@@ -2,9 +2,8 @@
 
 Necessidades atuis do projeto
 
-- [ ] Revisar as classes atuais
-- [ ] Confeccionar um Diagrama entidade relacionamento
-
+- [x] Revisar as classes atuais
+- [x] Confeccionar um Diagrama entidade relacionamento e de classes
 
 ## Fases de Desenvolvimento do projeto
 
@@ -41,85 +40,24 @@ Requisitos Apresentados:
 - Crie uma classe chamada Mensageiro, que possuirá um método estático chamado enviar mensagem. O método receberá como parâmetro de entrada: (1) o e-mail que representará o destinatário, (2) uma String representando o assunto da mensagem e (3) uma String representando a mensagem que se deseja eviar. Este método não terá retorno. O método deve ser usado para enviar a pessoa um e-mail contendo com o assunto e a mensagem passadas. Em seguida, altere o programa da questão quatro para incluindo a opção 7, “enviar uma mensagem para todos os jogadores”. Usando o método do Mensageiro, você enviará a mensagem informada pelo usuário a todos os jogadores salvos na Central.
 
 
-## Destrinchando Requisitos
-
-Ciclo lógico do processo de desenvolvimento
-
-```mermaid
-flowchart LR
-
-I(INICIO) -->|Questão 1| A[Construção da classe Jogador]
-
-A --> |Questão 2| B[Construção da classe de Central de Informação]
-
-```
-
-### Questão 1
-
-Criação da classe jogador e o enum equivalente para um de seus atributos, dados e especificações:
-
-```mermaid
-classDiagram
-
-
-%% Classe Base Jogador
-
-class Jogador{
-    -cpf: String
-    -nome: String
-    -email: String
-    -sexo: Sexo
-
-    +getCPF() String
-    +setCPF(String) void
-
-    +getNome() String
-    +setNome(String) void
-
-    +getEmail() String
-    +setEmail(String) void
- 
-    +getSexo() Sexo
-    +setSexo(Sexo) void
-
-    +toString() String
-
-}
-
-class Sexo{
-    <<enumeration>>
-    Masculino
-    Feminino
-}
-
-Jogador --> Sexo : "Usa"
-
-```
-
-Regras de Negócio
-
-CPF e Emails devem ser únicos em todo cadastro executado pelo sistema
-
-
-> Estes são os Requisitos iniciais do projeto
-
-
 ## Diagrama Entidade Relacionamento
 
 ```mermaid
 erDiagram
 
-Jogador{
-	
-	cpf VARCHAR(14) PK 
-	nome VARCHAR(100) "NN"
-	sexo VARCHAR(15) "NN"
-	
-	
-	email VARCHAR()100 "NN, UNIQUE"
-
+Jogador {
+    string cpf PK
+    string nome "NN"
+    string email "NN, UNIQUE"
+    string sexo "NN"
 }
 
+Palavra {
+    string palavra PK
+    string dica "NN"
+    date dataDeCadastro "NN"
+    string nivelDeDificuldade "NN"
+}
 ```
 
 ## Diagrama de Classes
@@ -127,47 +65,91 @@ Jogador{
 ```mermaid
 classDiagram
 
-
-%% Classe Base Jogador
-
-class Jogador{
-
-    -cpf: String
-    -nome: String
-    -email: String
-    -sexo: Sexo
-
-    +getCPF() String
-    +setCPF(String) void
-
-    +getNome() String
-    +setNome(String) void
-
-    +getEmail() String
-    +setEmail(String) void
- 
-    +getSexo() Sexo
-    +setSexo(Sexo) void
-
-    +toString() String
-
-}
-
-class Sexo{
+class Sexo {
     <<enumeration>>
-    Masculino
-    Feminino
+    MASCULINO
+    FEMININO
 }
 
-Jogador --> Sexo : "Usa"
+class NivelDeDificuldade {
+    <<enumeration>>
+    FACIL
+    MEDIO
+    DIFICIL
+}
 
-%% Classe Intermediária
+class Jogador {
+    -nome: String
+    -sexo: Sexo
+    -cpf: String
+    -email: String
+    +Jogador(nome, sexo, cpf, email)
+    +getNome() String
+    +setNome(nome) void
+    +getSexo() Sexo
+    +setSexo(sexo) void
+    +getCpf() String
+    +getEmail() String
+    +toString() String
+    +equals(obj) boolean
+    +hashCode() int
+}
 
+class Palavra {
+    -palavra: String
+    -dica: String
+    -dataDeCadastroDaPalavra: LocalDate
+    -nivelDeDificuldade: NivelDeDificuldade
+    +Palavra(palavra, dica, nivel)
+    +getPalavra() String
+    +setPalavra(palavra) void
+    +getDica() String
+    +setDica(dica) void
+    +getDataDeCadastroDaPalavra() LocalDate
+    +setDataDeCadastroDaPalavra(data) void
+    +getNivelDeDificuldade() NivelDeDificuldade
+    +setNivelDeDificuldade(nivel) void
+    +equals(obj) boolean
+    +hashCode() int
+    +toString() String
+}
 
 class CentralDeInformacoes {
-
-    -todosJogadores: ArrayList<Jogador>
-    -todasAsPalavras: ArrayList<Palavra>
-
+    -todosOsJogadores: ArrayList~Jogador~
+    -todasAsPalavras: ArrayList~Palavra~
+    +CentralDeInformacoes()
+    +getTodosOsJogadores() ArrayList~Jogador~
+    +setTodosOsJogadores(lista) void
+    +getTodasAsPalavras() ArrayList~Palavra~
+    +adicionarJogador(obj) boolean
+    +recuperarJogadorPorCPF(cpf) Jogador
+    +recuperarJogadorPeloEmail(email) Jogador
+    +adicionarPalavra(palavra) boolean
+    +recuperarPalavra(palavra) Palavra
 }
+
+class Persistencia {
+    -xstream: XStream
+    +salvarCentral(central, nomeArquivo) void
+    +salvarCentral(central) void
+    +recuperarCentral(nomeArquivo) CentralDeInformacoes
+    +recuperarCentral() CentralDeInformacoes
+}
+
+class ExtratorPalavrasCSV {
+    +extrairPalavras(nomeArquivo)$ ArrayList~Palavra~
+}
+
+class GeradorDeRelatorios {
+    +gerarRelatorio(central)$ void
+}
+
+class Mensageiro {
+    +enviarMensagem(destinatario, assunto, mensagem)$ void
+}
+
+Jogador --> Sexo
+Palavra --> NivelDeDificuldade
+CentralDeInformacoes o-- Jogador
+CentralDeInformacoes o-- Palavra
 ```

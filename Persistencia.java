@@ -4,37 +4,55 @@ import java.io.PrintWriter;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.security.AnyTypePermission;
 
 public class Persistencia {
-    private XStream xstream = new XStream(new DomDriver());
-    private File arquivo = new File("central.xml");
+    private final XStream xstream;
 
-    public void salvarCentral(CentralDeInformacoes central){
-        String xml = xstream.toXML(central);
+    public Persistencia() {
+        this.xstream = new XStream(new DomDriver());
+        // Configuração de segurança do XStream para permitir os tipos do projeto
+        XStream.setupDefaultSecurity(this.xstream);
+        this.xstream.addPermission(AnyTypePermission.ANY);
+    }
 
-        try{
-            if (!arquivo.exists()){
+    public void salvarCentral(CentralDeInformacoes central, String nomeArquivo) {
+        File arquivo = new File(nomeArquivo);
+        try {
+            if (!arquivo.exists()) {
                 arquivo.createNewFile();
             }
-            PrintWriter gravar = new PrintWriter(arquivo);
-            gravar.print(xml);
-            gravar.close();
-        } catch (Exception e){
-            e.printStackTrace();
+            try (PrintWriter gravar = new PrintWriter(arquivo)) {
+                String xml = xstream.toXML(central);
+                gravar.print(xml);
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao salvar a central no arquivo " + nomeArquivo + ": " + e.getMessage());
         }
     }
 
+    // Sobrecarga para uso conveniente com arquivo padrão
+    public void salvarCentral(CentralDeInformacoes central) {
+        salvarCentral(central, "central.xml");
+    }
 
-    public CentralDeInformacoes recuperarCentral() {
-        try{
-            if(arquivo.exists()){
-                FileInputStream fis = new FileInputStream(arquivo);
-                return (CentralDeInformacoes) xstream.fromXML(fis);
-
+    public CentralDeInformacoes recuperarCentral(String nomeArquivo) {
+        File arquivo = new File(nomeArquivo);
+        if (arquivo.exists() && arquivo.length() > 0) {
+            try (FileInputStream fis = new FileInputStream(arquivo)) {
+                Object obj = xstream.fromXML(fis);
+                if (obj instanceof CentralDeInformacoes) {
+                    return (CentralDeInformacoes) obj;
+                }
+            } catch (Exception e) {
+                System.err.println("Erro ao recuperar a central do arquivo " + nomeArquivo + ": " + e.getMessage());
             }
-        }catch (Exception e){
-                e.printStackTrace();
         }
         return new CentralDeInformacoes();
+    }
+
+    // Sobrecarga para uso conveniente com arquivo padrão
+    public CentralDeInformacoes recuperarCentral() {
+        return recuperarCentral("central.xml");
     }
 }

@@ -1,72 +1,106 @@
 import java.util.ArrayList;
 
-public class CentralDeInformacoes{
+public class CentralDeInformacoes {
 
-    private ArrayList<Jogador> todosJogadores;
-    private int tamanhoLista = 0;
+    private ArrayList<Jogador> todosOsJogadores;
     private ArrayList<Palavra> todasAsPalavras;
 
-    // Proteções da classe
-    public ArrayList<Jogador> getTodosOsJogadores (){return todosJogadores;}
-    public void setTodosOsJogadores (ArrayList<Jogador> lista){todosJogadores = lista;}
-    public ArrayList<Palavra> getTodasAsPalavras(){return todasAsPalavras;}
-
-    // Comportamentos da classe
-    public boolean adicionarJogador (Jogador obj){
-        if (
-            (recuperarJogadorPeloEmail(
-            obj.getEmail())!= null)
-            || 
-            (recuperarJogadorPorCPF(
-            obj.getCpf()) != null)
-
-            )return false;
-
-        todosJogadores.add(obj);
-        return true;
+    public CentralDeInformacoes() {
+        this.todosOsJogadores = new ArrayList<>();
+        this.todasAsPalavras = new ArrayList<>();
     }
 
-
-
-    public Jogador recuperarJogadorPorCPF(String cpf){
-        if (tamanhoLista == 0 || todosJogadores == null)
-            return null;
-
-        for(int contador = 0; contador < tamanhoLista; contador++){
-            Jogador jogador = todosJogadores.get(contador);
-            if (jogador.getCpf().equals(cpf))
-                return jogador;
+    // Proteções da classe (Getters e Setters)
+    public ArrayList<Jogador> getTodosOsJogadores() {
+        if (todosOsJogadores == null) {
+            todosOsJogadores = new ArrayList<>();
         }
-        return null;
+        return todosOsJogadores;
     }
 
+    public void setTodosOsJogadores(ArrayList<Jogador> lista) {
+        this.todosOsJogadores = (lista != null) ? lista : new ArrayList<>();
+    }
 
-    public Jogador recuperarJogadorPeloEmail (String email){
-        if (tamanhoLista == 0 || todosJogadores == null)
-            return null;
-
-        for(int contador = 0; contador < tamanhoLista; contador++){
-            Jogador jogador = todosJogadores.get(contador);
-            if (jogador.getEmail().equals(email))
-                return jogador;
+    public ArrayList<Palavra> getTodasAsPalavras() {
+        if (todasAsPalavras == null) {
+            todasAsPalavras = new ArrayList<>();
         }
-        return null;
+        return todasAsPalavras;
     }
-    public boolean cadastrarPalavra(Palavra palavra){
-        if(todasAsPalavras.contains(palavra)){
+
+    // Comportamentos para Jogador
+    public boolean adicionarJogador(Jogador obj) {
+        if (obj == null || obj.getCpf() == null || obj.getEmail() == null) {
             return false;
         }
-        todasAsPalavras.add(palavra);
-        return true;
 
+        if (recuperarJogadorPeloEmail(obj.getEmail()) != null || recuperarJogadorPorCPF(obj.getCpf()) != null) {
+            return false;
+        }
+
+        return getTodosOsJogadores().add(obj);
     }
-    public Palavra recuPalavra(String palavra){
-        for(Palavra p : todasAsPalavras){
-            if(p.getPalavra().equalsIgnoreCase(palavra)){
+
+    public Jogador recuperarJogadorPorCPF(String cpf) {
+        if (cpf == null || todosOsJogadores == null) {
+            return null;
+        }
+
+        for (Jogador jogador : todosOsJogadores) {
+            if (jogador.getCpf() != null && jogador.getCpf().trim().equalsIgnoreCase(cpf.trim())) {
+                return jogador;
+            }
+        }
+        return null;
+    }
+
+    public Jogador recuperarJogadorPeloEmail(String email) {
+        if (email == null || todosOsJogadores == null) {
+            return null;
+        }
+
+        for (Jogador jogador : todosOsJogadores) {
+            if (jogador.getEmail() != null && jogador.getEmail().trim().equalsIgnoreCase(email.trim())) {
+                return jogador;
+            }
+        }
+        return null;
+    }
+
+    // Comportamentos para Palavra
+    public boolean adicionarPalavra(Palavra palavra) {
+        if (palavra == null || palavra.getPalavra() == null) {
+            return false;
+        }
+
+        if (recuperarPalavra(palavra.getPalavra()) != null) {
+            return false;
+        }
+
+        return getTodasAsPalavras().add(palavra);
+    }
+
+    // Alias para manter compatibilidade
+    public boolean cadastrarPalavra(Palavra palavra) {
+        return adicionarPalavra(palavra);
+    }
+
+    public Palavra recuperarPalavra(String palavra) {
+        if (palavra == null || todasAsPalavras == null) {
+            return null;
+        }
+
+        for (Palavra p : todasAsPalavras) {
+            if (p.getPalavra() != null && p.getPalavra().trim().equalsIgnoreCase(palavra.trim())) {
                 return p;
             }
         }
         return null;
     }
-    
+
+    // Alias para manter compatibilidade
+    public Palavra recuPalavra(String palavra) {
+        return recuperarPalavra(palavra);
+    }
 }
