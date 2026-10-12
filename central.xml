@@ -1,3 +1,11 @@
 <CentralDeInformacoes>
-  <tamanhoLista>0</tamanhoLista>
+  <todosOsJogadores>
+    <Jogador>
+      <nome>Matheus</nome>
+      <sexo>MASCULINO</sexo>
+      <cpf>123</cpf>
+      <email>matheuscgpe@gmail.com</email>
+    </Jogador>
+  </todosOsJogadores>
+  <todasAsPalavras/>
 </CentralDeInformacoes>

@@ -10,9 +10,9 @@ import javax.mail.internet.MimeMessage;
 
 public class Mensageiro {
 
-    // Configurações para envio de e-mail (sugere-se conta específica para o projeto)
-    private static final String REMETENTE = "projetopoo.ifpb@gmail.com";
-    private static final String SENHA_APP = "suasenhaaqui"; // Senha de aplicativo do provedor
+    // Configurações para envio de e-mail (conta do projeto)
+    private static final String REMETENTE = "mhvprojeto@gmail.com";
+    private static final String SENHA_APP = "gsehckguewkscain"; // Senha de app de 16 caracteres sem espaços
     private static final String SMTP_HOST = "smtp.gmail.com";
     private static final String SMTP_PORT = "587";
 
@@ -29,10 +29,12 @@ public class Mensageiro {
         props.put("mail.smtp.port", SMTP_PORT);
         props.put("mail.smtp.ssl.protocols", "TLSv1.2");
 
+        final String senhaSemEspacos = SENHA_APP.replaceAll("\\s+", "");
+
         Session session = Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(REMETENTE, SENHA_APP);
+                return new PasswordAuthentication(REMETENTE, senhaSemEspacos);
             }
         });
 
